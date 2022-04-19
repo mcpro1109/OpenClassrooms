@@ -11,10 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.openclassrooms.entrevoisins.R;
-import com.openclassrooms.entrevoisins.events.DeleteNeighbourEvent;
 import com.openclassrooms.entrevoisins.model.Neighbour;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -24,9 +21,14 @@ import butterknife.ButterKnife;
 public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeighbourRecyclerViewAdapter.ViewHolder> {
 
     private final List<Neighbour> mNeighbours;
+    //ajout de l'attribut listener pour le click pour la vue du profil
+    private RecyclerViewClickListener listener;
 
-    public MyNeighbourRecyclerViewAdapter(List<Neighbour> items) {
+
+    public MyNeighbourRecyclerViewAdapter(List<Neighbour> items, RecyclerViewClickListener listener) {
         mNeighbours = items;
+        //ajout de listener pour le click
+        this.listener=listener;
     }
 
     @Override
@@ -45,12 +47,10 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.mNeighbourAvatar);
 
-        holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EventBus.getDefault().post(new DeleteNeighbourEvent(neighbour));
-            }
-        });
+
+        //ajout du click sur les élèments de la recyclerview pour accéder au profil
+        holder.mDeleteButton.setOnClickListener(v -> listener.onDelete(v, neighbour));
+        holder.itemView.setOnClickListener(v -> listener.onClick(v, holder.getAdapterPosition()));
     }
 
     @Override
@@ -69,6 +69,16 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
         public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+
         }
+
     }
+
+   //ajout de l'interface pour définir la position pour le click du recyclerview et le delete
+
+    public interface RecyclerViewClickListener{
+        void onClick(View v, int position);
+        void onDelete(View v, Neighbour neighbour);
+    }
+
 }
