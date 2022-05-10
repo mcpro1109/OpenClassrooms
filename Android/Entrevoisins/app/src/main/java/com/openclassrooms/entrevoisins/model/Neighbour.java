@@ -8,31 +8,46 @@ import java.util.Objects;
  */
 public class Neighbour implements Serializable {
 
-    /** Identifier */
+
+    /**
+     * Identifier
+     */
     private long id;
 
-    /** Full name */
+    /**
+     * Full name
+     */
     private String name;
 
-    /** Avatar */
+    /**
+     * Avatar
+     */
     private String avatarUrl;
 
-    /** Adress */
+    /**
+     * Adress
+     */
     private String address;
 
-    /** Phone number */
+    /**
+     * Phone number
+     */
     private String phoneNumber;
 
-    /** About me */
+    /**
+     * About me
+     */
     private String aboutMe;
+
 
     /**
      * Constructor
+     *
      * @param id
      * @param name
      * @param avatarUrl
      */
-       public Neighbour(long id, String name, String avatarUrl, String address,
+    public Neighbour(long id, String name, String avatarUrl, String address,
                      String phoneNumber, String aboutMe) {
         this.id = id;
         this.name = name;
@@ -40,6 +55,7 @@ public class Neighbour implements Serializable {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.aboutMe = aboutMe;
+
     }
 
     public long getId() {
@@ -102,4 +118,5 @@ public class Neighbour implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

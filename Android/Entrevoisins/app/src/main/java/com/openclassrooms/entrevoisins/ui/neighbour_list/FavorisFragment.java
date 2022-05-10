@@ -1,67 +1,104 @@
 package com.openclassrooms.entrevoisins.ui.neighbour_list;
 
-import android.arch.lifecycle.ViewModelProvider;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.di.DI;
+import com.openclassrooms.entrevoisins.events.FavoriteNeighbourEvent;
+import com.openclassrooms.entrevoisins.model.Neighbour;
 import com.openclassrooms.entrevoisins.service.NeighbourApiService;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.io.Serializable;
+import java.util.List;
 
 public class FavorisFragment extends Fragment {
 
-    private FavorisViewModel mViewModel;
-    private NeighbourApiService mApiService;
+
+    private NeighbourApiService mApiService = DI.getNeighbourApiService();
+    private RecyclerView mRecyclerView;
+    private List<Neighbour> mNeighbours = mApiService.getFavoriteNeighbours();
+    private FavoriteNeighbourRecyclerViewAdapter adapter;
 
     public static FavorisFragment newInstance() {
-        return new FavorisFragment();
+        FavorisFragment fFragment = new FavorisFragment();
+        return fFragment;
     }
 
-    //Pour recevoir le profil favoris
-   /* private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver()
-    {
-        @Override
-        public void onReceive(Context context, Intent intent)
-        {
-            if ("DATA_ACTION".equals(intent.getAction()) == true)
-            {
-                //Les données sont passées et peuvent être récupérées via :
-                intent.getSerializableExtra("DATA_EXTRA");
-                 intent.getIntExtra("DATA_EXTRA", 2);
-                //etc.
-            }
-        }
-    };*/
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mApiService = DI.getNeighbourApiService();
+        EventBus.getDefault().register(this);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.favoris_fragment, container, false);
+        View view = inflater.inflate(R.layout.favoris_fragment, container, false);
+        Context context = view.getContext();
+        mRecyclerView = (RecyclerView) view;
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
+        //pour ajouter l'adapter pour lier avec la recyclerview
+        adapter = new FavoriteNeighbourRecyclerViewAdapter(this, mNeighbours, new FavoriteNeighbourRecyclerViewAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                NeighbourProfileActivity.navigate(getActivity(), mNeighbours.get(position));
+            }
+
+            @Override
+            public void onDelete(View v, Neighbour neighbour) {
+                mApiService.deleteNeighbour(neighbour);
+            }
+        });
+
+        mRecyclerView.setAdapter(adapter);
+        return view;
+
+    }
+
+    //utilisation de eventbus pour envoyer les évènements ajout/suppression des favoris
+
+    @Subscribe
+    public void onFavorite(FavoriteNeighbourEvent event) {
+        //Toast.makeText(requireContext(), "event", Toast.LENGTH_SHORT).show();
+
+        mApiService.setFavoris(event.neighbour, event.isFavorite);
+        Log.e("app", "count=" + mApiService.getFavoriteNeighbours().size());
+        adapter.update(mApiService.getFavoriteNeighbours());
+        Log.e("app2", "count=" + mApiService.getFavoriteNeighbours().size());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
 
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(FavorisViewModel.class);
-        // TODO: Use the ViewModel
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
-
-
-
 }

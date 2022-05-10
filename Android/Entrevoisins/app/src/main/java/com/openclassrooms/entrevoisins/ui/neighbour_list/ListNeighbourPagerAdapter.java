@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.openclassrooms.entrevoisins.model.Neighbour;
+
 
 public class ListNeighbourPagerAdapter extends FragmentPagerAdapter {
 
@@ -11,15 +13,17 @@ public class ListNeighbourPagerAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
+
     /**
      * getItem is called to instantiate the fragment for the given page.
+     *
      * @param position
      * @return
      */
     @Override
     public Fragment getItem(int position) {
         //pour basculer entre les deux fragments list et favoris
-        switch (position){
+        switch (position) {
             case 0:
                 return NeighbourFragment.newInstance();
             case 1:
@@ -32,6 +36,7 @@ public class ListNeighbourPagerAdapter extends FragmentPagerAdapter {
 
     /**
      * get the number of pages
+     *
      * @return
      */
     @Override
