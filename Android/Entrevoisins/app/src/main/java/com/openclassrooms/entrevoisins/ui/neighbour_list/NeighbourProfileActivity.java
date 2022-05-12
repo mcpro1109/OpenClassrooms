@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -118,23 +117,29 @@ public class NeighbourProfileActivity extends AppCompatActivity {
 
         if (!isFavorite(neighbour)) {
             Toast.makeText(NeighbourProfileActivity.this, "Ajouté aux favoris", Toast.LENGTH_SHORT).show();
-            mImageFavorisView.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(NeighbourProfileActivity.this, R.color.yellow)));
-            mImageFavorisView.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(NeighbourProfileActivity.this, R.color.white)));
+            colorStarFavoriteTrue();
         } else {
             Toast.makeText(NeighbourProfileActivity.this, "Retiré des favoris", Toast.LENGTH_SHORT).show();
-            mImageFavorisView.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(NeighbourProfileActivity.this, R.color.white)));
-            mImageFavorisView.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(NeighbourProfileActivity.this, R.color.colorPrimary)));
+            colorStarFavoriteFalse();
         }
     }
 
     public void adaptFavoriteButton(Neighbour neighbour) {
         if (isFavorite(neighbour)) {
-            mImageFavorisView.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(NeighbourProfileActivity.this, R.color.yellow)));
-            mImageFavorisView.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(NeighbourProfileActivity.this, R.color.white)));
+            colorStarFavoriteTrue();
         } else {
-            mImageFavorisView.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(NeighbourProfileActivity.this, R.color.white)));
-            mImageFavorisView.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(NeighbourProfileActivity.this, R.color.colorPrimary)));
+            colorStarFavoriteFalse();
         }
+    }
+
+    public void colorStarFavoriteTrue() {
+        mImageFavorisView.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(NeighbourProfileActivity.this, R.color.yellow)));
+        mImageFavorisView.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(NeighbourProfileActivity.this, R.color.white)));
+    }
+
+    public void colorStarFavoriteFalse() {
+        mImageFavorisView.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(NeighbourProfileActivity.this, R.color.white)));
+        mImageFavorisView.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(NeighbourProfileActivity.this, R.color.colorPrimary)));
     }
 }
 
