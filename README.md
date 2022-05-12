@@ -14,6 +14,8 @@ Le lien de l'application : https://github.com/mcpro1109/OpenClassrooms
 Cliquer sur le bouton CODE pour télécharger le dossier ZIP ou le cloner via le terminal de commande: git clone https://github.com/mcpro1109/OpenClassrooms.git  
 Importer l'application dans Android Studio: file -> new -> Import Project. 
 Lancer l'application avec l'émulateur ou un téléphone connecté.
+
+<img src="Android/Entrevoisins/app/src/main/res/drawable/addproject.png" width="500">
  
 ## Organisation  
    - ListNeighbourActivity est l'activité principale du programme. Elle est la page d'accueil lors de l'ouverture du programme. Dans cette activité nous avons deux onglets qui correspondent à deux fragments.  
@@ -25,7 +27,9 @@ Lancer l'application avec l'émulateur ou un téléphone connecté.
   
    - NeighbourProfileActivity est l'activité qui s'ouvre lorsque l'on clique sur un profil de la liste.  
     les différents champs sont repris afin de remplir et de donner plus d'indications sur le voisin.  
-    Un FloatingActionButton ajout aux favoris qui permet d'ajouter le voisin à la liste des favoris (via le fragment FavorisFragment).  
-  
-## Statut   
+    Un FloatingActionButton ajout aux favoris qui permet d'ajouter le voisin à la liste des favoris (via le fragment FavorisFragment). 
+    
+  <img src="Android/Entrevoisins/app/src/main/res/drawable/entrevoisins.PNG" width="500">
+    
+##  Statut   
 Le projet est complet et fonctionnel.  
